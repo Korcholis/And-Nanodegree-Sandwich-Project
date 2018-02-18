@@ -33,6 +33,8 @@ public class DetailActivity extends AppCompatActivity {
 
     private ImageView ingredientsIv;
 
+    private Sandwich sandwich;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +68,7 @@ public class DetailActivity extends AppCompatActivity {
 
         String[] sandwiches = getResources().getStringArray(R.array.sandwich_details);
         String json = sandwiches[position];
-        Sandwich sandwich = JsonUtils.parseSandwichJson(json);
+        sandwich = JsonUtils.parseSandwichJson(json);
         if (sandwich == null) {
             // Sandwich data unavailable
             closeOnError();
@@ -74,6 +76,14 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         populateUI();
+    }
+
+    private void closeOnError() {
+        finish();
+        Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void populateUI() {
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -119,14 +129,5 @@ public class DetailActivity extends AppCompatActivity {
             alsoKnownAsLbl.setVisibility(View.VISIBLE);
             alsoKnownAsTv.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void closeOnError() {
-        finish();
-        Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
-    }
-
-    private void populateUI() {
-
     }
 }
